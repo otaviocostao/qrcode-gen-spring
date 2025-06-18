@@ -4,6 +4,7 @@ import com.api.qrcodegen.dto.qrcode.QrCodeGenerateRequest;
 import com.api.qrcodegen.dto.qrcode.QrCodeGenerateResponse;
 import com.api.qrcodegen.service.QrCodeGeneratorService;
 import com.google.zxing.WriterException;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,13 +25,8 @@ public class QrCodeController {
 
 
     @PostMapping
-    public ResponseEntity<QrCodeGenerateResponse> generate(@RequestBody QrCodeGenerateRequest request) throws IOException, WriterException {
-        try{
-            QrCodeGenerateResponse response = this.qrCodeGeneratorService.generateAndUploadQrCode(request.text());
-            return ResponseEntity.ok(response);
-        }catch (Exception e){
-            System.out.println(e);
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<QrCodeGenerateResponse> generate(@Valid @RequestBody QrCodeGenerateRequest request) throws IOException, WriterException {
+        QrCodeGenerateResponse response = this.qrCodeGeneratorService.generateAndUploadQrCode(request.text());
+        return ResponseEntity.ok(response);
     }
 }
